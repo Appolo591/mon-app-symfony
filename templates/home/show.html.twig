@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.titre }}{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <article>
+                <h1 class="mt-4">{{ article.titre }}</h1>
+                <hr>
+                <div class="mt-4">
+                    <p class="lead" style="white-space: pre-wrap;">{{ article.contenu }}</p>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ path('app_home') }}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+                    <a href="{{ path('app_article_delete', {'id': article.id}) }}" 
+                    class="btn btn-danger" 
+                    onclick="return confirm('Es-tu sûr de vouloir supprimer cet article ?')">
+                    Supprimer l'article
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
+{% endblock %}

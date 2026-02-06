@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Mon Blog{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Derniers Articles</h1>
+
+    <div class="row">
+        {% for article in articles %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.titre }}</h5>
+                        {# On affiche un extrait des 50 premiers caractères #}
+                        <p class="card-text text-muted">{{ article.contenu|slice(0, 50) }}...</p>
+                        <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-primary">Lire la suite</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="alert alert-info">Aucun article trouvé dans la base de données.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
