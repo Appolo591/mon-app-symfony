@@ -14,6 +14,14 @@
                         {# On affiche un extrait des 50 premiers caractères #}
                         <p class="card-text text-muted">{{ article.contenu|slice(0, 50) }}...</p>
                         <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-primary">Lire la suite</a>
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-secondary">Modifier</a>
+                            <a href="{{ path('app_article_delete', {'id': article.id}) }}" 
+                            class="btn btn-danger" 
+                            onclick="return confirm('Es-tu sûr de vouloir supprimer cet article ?')">
+                            Supprimer l'article
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

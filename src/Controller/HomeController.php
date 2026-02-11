@@ -26,6 +26,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/article/nouveau', name: 'app_article_new')]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $article = new Article();
@@ -53,7 +54,29 @@ class HomeController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+    {
+        // On crée le formulaire en le remplissant avec les données de l'objet $article
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Pas besoin de $entityManager->persist($article) ici car l'article existe déjà
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('home/edit.html.twig', [
+            'article' => $article,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/article/supprimer/{id}', name: 'app_article_delete', methods: ['POST', 'GET'])]
+    #[IsGranted('ROLE_USER')]
     public function delete(Article $article, EntityManagerInterface $em): Response
     {
         // On demande à l'EntityManager de supprimer l'objet
