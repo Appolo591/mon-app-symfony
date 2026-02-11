@@ -13,7 +13,7 @@
                     <p class="lead" style="white-space: pre-wrap;">{{ article.contenu }}</p>
                 </div>
                 <hr>
-                {% if is_granted('ROLE_USER') %}
+                {% if is_granted('EDIT', article) %}
                 <div class="d-flex justify-content-between">
                     <a href="{{ path('app_article_delete', {'id': article.id}) }}" 
                     class="btn btn-danger" 

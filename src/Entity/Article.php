@@ -19,6 +19,11 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $contenu = null;
 
+    // Ajout de la relation vers l'utilisateur
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -32,7 +37,6 @@ class Article
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
-
         return $this;
     }
 
@@ -44,7 +48,18 @@ class Article
     public function setContenu(string $contenu): static
     {
         $this->contenu = $contenu;
+        return $this;
+    }
 
+    // Getter et Setter pour l'auteur
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
         return $this;
     }
 }

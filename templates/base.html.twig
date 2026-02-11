@@ -32,7 +32,12 @@
             <div class="d-flex align-items-center">
                 {# 3. Connexion / Déconnexion #}
                 {% if app.user %}
-                    <span class="me-3 text-muted">{{ app.user.userIdentifier }}</span>
+                    <span class="me-3 text-muted">
+                        {{ app.user.userIdentifier }} 
+                        <span class="badge {{ 'ROLE_ADMIN' in app.user.roles ? 'bg-danger' : 'bg-info' }}">
+                            {{ 'ROLE_ADMIN' in app.user.roles ? 'Admin' : 'Utilisateur' }}
+                        </span>
+                    </span>
                     <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">Connexion</a>

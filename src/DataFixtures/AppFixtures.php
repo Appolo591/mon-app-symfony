@@ -19,21 +19,34 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // 1. Créer un utilisateur de test
+        // 1. Créer l'ADMIN (Il aura l'ID 1 si c'est le premier persist)
+        $admin = new User();
+        $admin->setEmail('admin@test.com');
+        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setPassword($this->hasher->hashPassword($admin, 'password'));
+        $manager->persist($admin);
+
+        // 2. Créer l'USER (Il aura l'ID 2)
         $user = new User();
-        $user->setEmail('admin@test.com');
-        $password = $this->hasher->hashPassword($user, 'password');
-        $user->setPassword($password);
+        $user->setEmail('user@test.com');
+        $user->setRoles(['ROLE_USER']);
+        $user->setPassword($this->hasher->hashPassword($user, 'password'));
         $manager->persist($user);
 
-        // 2. Créer quelques articles
-        for ($i = 1; $i <= 5; $i++) {
-            $article = new Article();
-            $article->setTitre("Article de test n°$i");
-            $article->setContenu("Contenu de l'article n°$i");
-            $manager->persist($article);
-        }
+        // 3. Créer un article pour l'ADMIN
+        $artAdmin = new Article();
+        $artAdmin->setTitre("Article de l'Admin");
+        $artAdmin->setContenu("Ceci est le contenu obligatoire pour l'article de l'admin."); // <-- AJOUTE CETTE LIGNE
+        $artAdmin->setAuthor($admin); // <--- Ici on lie à l'ID 1
+        $manager->persist($artAdmin);
 
+        // 4. Créer un article pour l'USER
+        $artUser = new Article();
+        $artUser->setTitre("Article de l'User");
+        $artUser->setAuthor($user); // <--- Ici on lie à l'ID 2
+        $artUser->setContenu("Ceci est le contenu obligatoire pour l'article de l'utilisateur."); // <-- AJOUTE CETTE LIGNE
+        $manager->persist($artUser);
+        
         $manager->flush();
     }
 }

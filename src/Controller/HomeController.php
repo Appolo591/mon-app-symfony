@@ -35,6 +35,7 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $article->setAuthor($this->getUser());
             $em->persist($article);
             $em->flush();
 
@@ -58,6 +59,11 @@ class HomeController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        // C'est ici que la magie opère :
+        // Symfony appelle ton ArticleVoter. 
+        // Si l'utilisateur n'est pas Admin ET n'est pas l'auteur, une erreur 403 est lancée.
+        $this->denyAccessUnlessGranted('EDIT', $article);
+
         // On crée le formulaire en le remplissant avec les données de l'objet $article
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -79,6 +85,8 @@ class HomeController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function delete(Article $article, EntityManagerInterface $em): Response
     {
+        // Cette ligne bloque l'accès direct via l'URL si le Voter dit "non"
+        $this->denyAccessUnlessGranted('EDIT', $article);
         // On demande à l'EntityManager de supprimer l'objet
         $em->remove($article);
         $em->flush();
