@@ -21,6 +21,8 @@ class AppFixtures extends Fixture
     {
         // 1. Créer l'ADMIN (Il aura l'ID 1 si c'est le premier persist)
         $admin = new User();
+        $admin->setUsername('SuperAdmin');
+        $admin->setAvatar('https://i.pravatar.cc/150?u=admin');
         $admin->setEmail('admin@test.com');
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setPassword($this->hasher->hashPassword($admin, 'password'));
@@ -28,6 +30,8 @@ class AppFixtures extends Fixture
 
         // 2. Créer l'USER (Il aura l'ID 2)
         $user = new User();
+        $user->setUsername('JeanDupont');
+        $user->setAvatar('https://i.pravatar.cc/150?u=jean');
         $user->setEmail('user@test.com');
         $user->setRoles(['ROLE_USER']);
         $user->setPassword($this->hasher->hashPassword($user, 'password'));

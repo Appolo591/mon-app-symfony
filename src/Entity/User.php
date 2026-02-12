@@ -36,6 +36,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,6 +131,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

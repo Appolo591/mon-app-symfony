@@ -1,35 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Mon Blog{% endblock %}
+{% block title %}Accueil - Liste des Articles{% endblock %}
 
 {% block body %}
-    <h1 class="mb-4">Derniers Articles</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Derniers Articles</h1>
+    {# {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('app_article_new') }}" class="btn btn-primary">+ Nouvel Article</a>
+    {% endif %} #}
+</div>
 
-    <div class="row">
-        {% for article in articles %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ article.titre }}</h5>
-                        <p>Auteur : {{ article.author ? article.author.email : 'Anonyme' }}</p>
-                        {# On affiche un extrait des 50 premiers caractères #}
-                        <p class="card-text text-muted">{{ article.contenu|slice(0, 50) }}...</p>
-                        <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-primary">Lire la suite</a>
-                        {% if is_granted('EDIT', article) %}
-                            <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-secondary">Modifier</a>
-                            <a href="{{ path('app_article_delete', {'id': article.id}) }}" 
-                            class="btn btn-danger" 
-                            onclick="return confirm('Es-tu sûr de vouloir supprimer cet article ?')">
-                            Supprimer l'article
-                            </a>
-                        {% endif %}
+<div class="row">
+    {% for article in articles %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                {# Image de l'article (Optionnel : si tu as un champ image) #}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-primary">{{ article.titre }}</h5>
+                    <p class="card-text text-muted">
+                        {{ article.contenu|slice(0, 100) ~ '...' }}
+                    </p>
+                    <a href="{{ path('app_article_show', {'id': article.id}) }}" class="stretched-link mt-auto">Lire la suite</a>
+                </div>
+
+                {# FOOTER DE LA CARTE : Sécurisé pour l'auteur #}
+                <div class="card-footer bg-white border-top-0 pb-3">
+                    <hr class="my-2">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            {# Ligne 18 : On vérifie si l'auteur existe pour éviter l'erreur #}
+                            {% if article.author %}
+                                <img src="{{ article.author.avatar|default('https://ui-avatars.com/api/?name=' ~ article.author.username|url_encode) }}" 
+                                     alt="Avatar" 
+                                     class="rounded-circle me-2" 
+                                     style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #eee;">
+                                
+                                <span class="small fw-bold text-dark">
+                                    {{ article.author.username }}
+                                </span>
+                            {% else %}
+                                <span class="small text-muted italic">Auteur anonyme</span>
+                            {% endif %}
+                        </div>
+
+                        {# Boutons d'action rapides (Voter) #}
+                        <div class="btn-group">
+                            {% if is_granted('EDIT', article) %}
+                                <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-sm btn-outline-secondary border-0" style="position: relative; z-index: 2;">
+                                    ✏️
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
-        {% else %}
-            <div class="col-12">
-                <p class="alert alert-info">Aucun article trouvé dans la base de données.</p>
-            </div>
-        {% endfor %}
-    </div>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">Aucun article n'a été publié pour le moment.</div>
+        </div>
+    {% endfor %}
+</div>
+
+
 {% endblock %}
