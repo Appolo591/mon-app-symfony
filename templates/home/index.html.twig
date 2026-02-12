@@ -17,6 +17,9 @@
                 {# Image de l'article (Optionnel : si tu as un champ image) #}
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title text-primary">{{ article.titre }}</h5>
+                    <div class="text-muted mb-2" style="font-size: 0.8rem;">
+                        📅 {{ article.createdAt ? article.createdAt|date('d/m/Y') : 'Date non définie' }}
+                    </div>
                     <p class="card-text text-muted">
                         {{ article.contenu|slice(0, 100) ~ '...' }}
                     </p>

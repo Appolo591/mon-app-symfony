@@ -13,6 +13,45 @@
                     <p class="lead" style="white-space: pre-wrap;">{{ article.contenu }}</p>
                 </div>
                 <hr>
+
+                <hr class="my-5">
+
+                <h3>💬 Commentaires ({{ article.comments|length }})</h3>
+
+                {# Affichage de la liste des commentaires #}
+                <div class="mb-5">
+                    {% for comment in article.comments %}
+                        <div class="card mb-3 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <img src="{{ comment.author.avatar|default('https://ui-avatars.com/api/?name=' ~ comment.author.username) }}" 
+                                        class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                                    <strong>{{ comment.author.username }}</strong>
+                                    <small class="text-muted ms-2">le {{ comment.createdAt|date('d/m/Y à H:i') }}</small>
+                                </div>
+                                <p class="mb-0">{{ comment.content }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Soyez le premier à laisser un commentaire !</p>
+                    {% endfor %}
+                </div>
+
+                {# Formulaire de commentaire (seulement si connecté) #}
+                <div class="bg-light p-4 rounded shadow-sm">
+                    <h4>Laisser un message</h4>
+                    {% if app.user %}
+                        {{ form_start(commentForm) }}
+                            {{ form_row(commentForm.content) }}
+                            <button type="submit" class="btn btn-primary mt-2">Envoyer</button>
+                        {{ form_end(commentForm) }}
+                    {% else %}
+                        <p class="mb-0">
+                            <a href="{{ path('app_login') }}">Connectez-vous</a> pour commenter.
+                        </p>
+                    {% endif %}
+                </div>
+
                 {% if is_granted('EDIT', article) %}
                 <div class="d-flex justify-content-between">
                     <a href="{{ path('app_article_delete', {'id': article.id}) }}" 
