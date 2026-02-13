@@ -119,15 +119,31 @@ class HomeController extends AbstractController
 
         return $this->redirectToRoute('app_home');
     }
+
+    #[Route('/comment/delete/{id}', name: 'app_comment_delete', methods: ['POST', 'GET'])]
+    public function deleteComment(Comment $comment, EntityManagerInterface $entityManager): Response
+    {
+
+    if ($this->getUser() !== $comment->getAuthor() && !$this->isGranted('ROLE_ADMIN')) {
+    // Si l'utilisateur n'est NI l'auteur, NI admin, on bloque
+    throw $this->createAccessDeniedException('Vous n\'avez pas le droit de faire ça.');
+    }
+    
+    // Sécurité : On vérifie que l'utilisateur connecté est bien l'auteur du commentaire
+    if ($this->getUser() !== $comment->getAuthor()) {
+        $this->addFlash('danger', 'Vous ne pouvez pas supprimer ce commentaire.');
+        return $this->redirectToRoute('app_article_show', ['id' => $comment->getArticle()->getId()]);
+    }
+
+    $articleId = $comment->getArticle()->getId();
+    
+    $entityManager->remove($comment);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Commentaire supprimé avec succès.');
+
+    return $this->redirectToRoute('app_article_show', ['id' => $articleId]);
+}
 }
 
-// final class HomeController extends AbstractController
-// {
-//     #[Route('/', name: 'app_home')]
-//     public function index(): Response
-//     {
-//         return $this->render('home/index.html.twig', [
-//             'controller_name' => 'HomeController',
-//         ]);
-//     }
-// }
+

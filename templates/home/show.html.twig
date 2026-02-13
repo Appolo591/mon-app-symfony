@@ -23,11 +23,19 @@
                     {% for comment in article.comments %}
                         <div class="card mb-3 border-0 shadow-sm">
                             <div class="card-body">
-                                <div class="d-flex align-items-center mb-2">
+                                <div class="d-flex align-items-center p-2">
                                     <img src="{{ comment.author.avatar|default('https://ui-avatars.com/api/?name=' ~ comment.author.username) }}" 
                                         class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
                                     <strong>{{ comment.author.username }}</strong>
-                                    <small class="text-muted ms-2">le {{ comment.createdAt|date('d/m/Y à H:i') }}</small>
+                                    <small class="text-muted p-2">le {{ comment.createdAt|date('d/m/Y à H:i') }}</small>
+                                    {# On n'affiche le bouton que si l'utilisateur est l'auteur #}
+                                    {% if app.user == comment.author or is_granted('ROLE_ADMIN')%}
+                                        <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" 
+                                        class="btn btn-sm btn-outline-danger justify-content-end"
+                                        onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">
+                                        Supprimer
+                                        </a>
+                                    {% endif %}
                                 </div>
                                 <p class="mb-0">{{ comment.content }}</p>
                             </div>
