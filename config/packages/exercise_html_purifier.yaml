@@ -1,0 +1,6 @@
+exercise_html_purifier:
+    html_profiles:
+        default:
+            config:
+                HTML.Allowed: 'p,b,strong,i,em,ul,ol,li,br,span,blockquote,a[href]'
+                Cache.DefinitionImpl: null # Utile en développement

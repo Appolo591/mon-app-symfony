@@ -10,7 +10,7 @@
                 <h1 class="mt-4">{{ article.titre }}</h1>
                 <hr>
                 <div class="mt-4">
-                    <p class="lead" style="white-space: pre-wrap;">{{ article.contenu }}</p>
+                    <p class="lead" style="white-space: pre-wrap;">{{ article.contenu |purify }}</p>
                 </div>
                 <hr>
 

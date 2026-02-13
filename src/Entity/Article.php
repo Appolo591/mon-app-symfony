@@ -36,6 +36,10 @@ class Article
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'article')]
     private Collection $comments;
 
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Category $category = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -64,7 +68,7 @@ class Article
 
     public function setContenu(string $contenu): static
     {
-        $this->contenu = $contenu;
+        $this->contenu = strip_tags($contenu);
         return $this;
     }
 
@@ -118,6 +122,18 @@ class Article
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

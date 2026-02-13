@@ -59,6 +59,15 @@
             "config/routes/easyadmin.yaml"
         ]
     },
+    "exercise/htmlpurifier-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "99590c5352b58fadacd5535337589aba7e44f5a7"
+        }
+    },
     "phpunit/phpunit": {
         "version": "11.5",
         "recipe": {

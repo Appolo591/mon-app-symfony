@@ -19,9 +19,18 @@
                     <h5 class="card-title text-primary">{{ article.titre }}</h5>
                     <div class="text-muted mb-2" style="font-size: 0.8rem;">
                         📅 {{ article.createdAt ? article.createdAt|date('d/m/Y') : 'Date non définie' }}
+                        <p>
+                        {% if article.category %}
+                        <a href="{{ path('app_category_show', {'id': article.category.id}) }}" class="badge bg-info text-decoration-none position-relative" style="z-index: 2;">
+                            {{ article.category.titre }}
+                        </a>
+                        {% else %}
+                            <span class="badge bg-secondary badge-info">Sans catégorie</span>
+                        {% endif %}
+                        </p>
                     </div>
                     <p class="card-text text-muted">
-                        {{ article.contenu|slice(0, 100) ~ '...' }}
+                        {{ article.contenu|purify|raw|slice(0, 100) ~ '...' }}
                     </p>
                     <a href="{{ path('app_article_show', {'id': article.id}) }}" class="stretched-link mt-auto">Lire la suite</a>
                 </div>

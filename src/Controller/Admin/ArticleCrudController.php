@@ -20,12 +20,15 @@ class ArticleCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
-        return [
-            TextField::new('titre'),
-            TextEditorField::new('contenu'),
-            DateTimeField::new('createdAt')->onlyOnIndex(), // La date seulement dans la liste
-            AssociationField::new('author', 'Auteur'),
-        ];
+        
+          yield  TextField::new('titre');
+          yield  TextEditorField::new('contenu');
+          yield  DateTimeField::new('createdAt')->onlyOnIndex(); // La date seulement dans la liste
+          yield  AssociationField::new('author', 'Auteur');
+          yield  AssociationField::new('category', 'La Catégorie')
+            ->setRequired(true)
+            ->autocomplete();
+        
     }
     
 }

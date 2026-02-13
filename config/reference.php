@@ -1526,6 +1526,17 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     controllers_json?: scalar|Param|null, // Deprecated: The "twig_component.controllers_json" config option is deprecated, and will be removed in 3.0. // Default: null
  * }
+ * @psalm-type ExerciseHtmlPurifierConfig = array{
+ *     default_cache_serializer_path?: scalar|Param|null, // Default: "%kernel.cache_dir%/htmlpurifier"
+ *     default_cache_serializer_permissions?: scalar|Param|null, // Default: 493
+ *     html_profiles?: array<string, array{ // Default: []
+ *         config?: array<string, mixed>,
+ *         attributes?: array<string, array<string, scalar|Param|null>>,
+ *         elements?: array<string, list<mixed>>,
+ *         blank_elements?: list<scalar|Param|null>,
+ *         parents?: list<scalar|Param|null>,
+ *     }>,
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1541,6 +1552,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     monolog?: MonologConfig,
  *     symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *     twig_component?: TwigComponentConfig,
+ *     exercise_html_purifier?: ExerciseHtmlPurifierConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1559,6 +1571,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         maker?: MakerConfig,
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         twig_component?: TwigComponentConfig,
+ *         exercise_html_purifier?: ExerciseHtmlPurifierConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1575,6 +1588,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         twig_component?: TwigComponentConfig,
+ *         exercise_html_purifier?: ExerciseHtmlPurifierConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1592,6 +1606,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         twig_component?: TwigComponentConfig,
+ *         exercise_html_purifier?: ExerciseHtmlPurifierConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
