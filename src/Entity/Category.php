@@ -24,6 +24,9 @@ class Category
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'category')]
     private Collection $articles;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $color = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -81,4 +84,17 @@ class Category
         // On retourne le titre de la catégorie pour l'affichage dans les formulaires
         return $this->titre;
     }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
 }

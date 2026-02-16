@@ -5,42 +5,50 @@
 {% block body %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2">Derniers Articles</h1>
-    {# {% if is_granted('ROLE_USER') %}
-        <a href="{{ path('app_article_new') }}" class="btn btn-primary">+ Nouvel Article</a>
-    {% endif %} #}
 </div>
 
 <div class="row">
     {% for article in articles %}
+        {# 1. On définit la couleur (celle de la catégorie ou un gris par défaut) #}
+        {% set catColor = article.category and article.category.color ? article.category.color : '#6c757d' %}
+        
         <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-0">
-                {# Image de l'article (Optionnel : si tu as un champ image) #}
+            {# 2. Application de la couleur sur la bordure haute et l'ombre #}
+            <div class="card h-100 border-0 shadow-sm" 
+                 style="border-top: 4px solid {{ catColor }} !important; 
+                        box-shadow: 0 10px 20px {{ catColor }}22 !important;">
+                
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-primary">{{ article.titre }}</h5>
+                    {# 3. Le titre prend aussi la couleur pour plus de rappel #}
+                    <h5 class="card-title fw-bold" style="color: {{ catColor }};">{{ article.titre }}</h5>
+                    
                     <div class="text-muted mb-2" style="font-size: 0.8rem;">
                         📅 {{ article.createdAt ? article.createdAt|date('d/m/Y') : 'Date non définie' }}
-                        <p>
+                        <p class="mt-2">
                         {% if article.category %}
-                        <a href="{{ path('app_category_show', {'id': article.category.id}) }}" class="badge bg-info text-decoration-none position-relative" style="z-index: 2;">
-                            {{ article.category.titre }}
-                        </a>
+                            {# 4. Le badge utilise la couleur de fond dynamique #}
+                            <a href="{{ path('app_category_show', {'id': article.category.id}) }}" 
+                               class="badge text-decoration-none position-relative" 
+                               style="z-index: 2; background-color: {{ catColor }}; color: #fff;">
+                                {{ article.category.titre }}
+                            </a>
                         {% else %}
-                            <span class="badge bg-secondary badge-info">Sans catégorie</span>
+                            <span class="badge bg-secondary">Sans catégorie</span>
                         {% endif %}
                         </p>
                     </div>
+
                     <p class="card-text text-muted">
                         {{ article.contenu|purify|raw|slice(0, 100) ~ '...' }}
                     </p>
+                    
                     <a href="{{ path('app_article_show', {'id': article.id}) }}" class="stretched-link mt-auto">Lire la suite</a>
                 </div>
 
-                {# FOOTER DE LA CARTE : Sécurisé pour l'auteur #}
                 <div class="card-footer bg-white border-top-0 pb-3">
                     <hr class="my-2">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
-                            {# Ligne 18 : On vérifie si l'auteur existe pour éviter l'erreur #}
                             {% if article.author %}
                                 <img src="{{ article.author.avatar|default('https://ui-avatars.com/api/?name=' ~ article.author.username|url_encode) }}" 
                                      alt="Avatar" 
@@ -55,7 +63,6 @@
                             {% endif %}
                         </div>
 
-                        {# Boutons d'action rapides (Voter) #}
                         <div class="btn-group">
                             {% if is_granted('EDIT', article) %}
                                 <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-sm btn-outline-secondary border-0" style="position: relative; z-index: 2;">
@@ -73,6 +80,4 @@
         </div>
     {% endfor %}
 </div>
-
-
 {% endblock %}
